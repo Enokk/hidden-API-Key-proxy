@@ -9,11 +9,10 @@ weatherRouter.get('/weather', async (req: Request, res: Response) => {
         params.append(process.env.WEATHER_API_KEY_NAME || 'none', process.env.WEATHER_API_KEY_VALUE || 'none');
 
         const apiRes = await needle('get', `${process.env.WEATHER_API_URL || 'none'}?${params}`)
-        const data = apiRes.body
-
-        res.status(200).json(data);
+        
+        return res.status(200).json(apiRes.body);
 
     } catch (error) {
-      res.status(500).json(error);
+      return res.status(500).json(error);
     }
 });
