@@ -1,9 +1,10 @@
 import { Router, Request, Response } from 'express';
+import apicache from 'apicache';
 import needle from 'needle';
 
 export const weatherRouter = Router()
 
-weatherRouter.get('/weather', async (req: Request, res: Response) => {
+weatherRouter.get('/weather', apicache.middleware('10 minutes'), async (req: Request, res: Response) => {
     try {
         const params: URLSearchParams = new URL(req.url, 'http://dummy').searchParams;
         params.append(process.env.WEATHER_API_KEY_NAME || 'none', process.env.WEATHER_API_KEY_VALUE || 'none');
@@ -13,6 +14,6 @@ weatherRouter.get('/weather', async (req: Request, res: Response) => {
         return res.status(200).json(apiRes.body);
 
     } catch (error) {
-      return res.status(500).json(error);
+        return res.status(500).json(error);
     }
 });
